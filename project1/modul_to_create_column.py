@@ -33,11 +33,18 @@ def create_frequency(note_string):
 		f *= S
 		diff_number = number - 4
 		f *= 2 ** diff_number
-		return f 
+	return f 
 
-def create_note(column_of_track, length_of_column, folder, next_sample, note_string):
-	f = create_frequency(note_string)
-	#do 1?
-	t = np.linspace(0, 1, next_sample)
-	y = np.sin(2 * np.pi * f * t)
-	sample = np.transpose(np.vstack((y, y)))
+def create_note(column_of_track, length_of_column, folder, next_sample):
+	column = np.zeros((length_of_column, 2))
+	for i, j in enumerate(column_of_track):
+		if j != '---':
+			note_string = j
+			f = create_frequency(note_string)
+			t = np.linspace(0, 1, next_sample)
+			y = np.sin(2 * np.pi * f * t)
+			y = np.int16(y / max(np.abs(y)) * 32767)
+			sample = np.transpose(np.vstack((y, y)))
+			column[i * next_sample : i * next_sample + next_sample, :] += sample
+	return column
+
