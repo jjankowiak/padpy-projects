@@ -20,5 +20,24 @@ def read_sample(column_of_track, length_of_column, folder, next_sample):
             column[i * next_sample : i * next_sample + n, :] += sample[1]
     return column
 
-def create_note(column_of_track, length_of_column, folder, next_sample):
- 	print('to jeszcze trzeba dokończyć')
+def create_frequency(note_string):
+	letter = note_string[0]
+	sharp = note_string[1]
+	number = int(note_string[2])
+	f_basic = 440
+	S = 2 ** (1 / 12)
+	# dictionary with powers
+	dict_of_sound = {'A': 0, 'B': 2, 'C' : 3, 'D' : 5, 'E' : 7, 'F' : 8, 'G' : 10}
+	f = f_basic * (S ** dict_of_sound[letter])
+	if sharp == '#':
+		f *= S
+		diff_number = number - 4
+		f *= 2 ** diff_number
+		return f 
+
+def create_note(column_of_track, length_of_column, folder, next_sample, note_string):
+	f = create_frequency(note_string)
+	#do 1?
+	t = np.linspace(0, 1, next_sample)
+	y = np.sin(2 * np.pi * f * t)
+	sample = np.transpose(np.vstack((y, y)))
