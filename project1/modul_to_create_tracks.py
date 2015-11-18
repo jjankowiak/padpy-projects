@@ -1,23 +1,16 @@
 import pandas as pd
-import scipy.io.wavfile as wav
 import numpy as np
+import modul_to_create_column as cc
 from os import path
 
 def concatenate_one_type_of_sample(column_of_track, length_of_column, folder, next_sample):
-    column = np.zeros((length_of_column, 2))
-    # check the number of sample
-    num_of_sample = list(set(column_of_track).difference(['--']))[0]
-    sample = wav.read(path.join(folder, 'sample' + num_of_sample + '.wav'))
-    # number of bits in the sample
-    n = sample[1].shape[0]
-    # if length of sample is bigger than number of sounds (?) per bit we add more columns at the end of array
-    if n > next_sample:
-        how_many_to_add = n - next_sample
-        column = np.zeros((length_of_column + how_many_to_add, 2))
-    # concatenate sample and 'empty sounds' in order
-    for i, j in enumerate(column_of_track):
-        if j != '--':
-            column[i * next_sample : i * next_sample + n, :] += sample[1]
+    column = np.zeros((length_of_column, 2)) 
+    # check the length of the elements in column (assumption - all elements have the same length, so we check only first one)
+    column_length = len(column_of_track[1])
+    if column_length == 2:
+        column = cc.read_sample(column_of_track, length_of_column, folder, next_sample)
+    else:
+        column = cc.create_note(column_of_track, length_of_column, folder, next_sample)
     column = np.array(column, dtype = 'int16')
     return column
 
@@ -56,7 +49,7 @@ def merge_all_concatenated_samples(list_of_samples):
     sample_all = np.array(sample_all, dtype = 'int16')
     return sample_all
 
-def create_track(track_name, bmp, folder):
+def create_track(track_name, bpm, folder):
     path_to_track = path.join(folder, track_name)
     track = pd.read_csv(path_to_track, sep = ' ', header = None, dtype = str)
     raw_num_of_rows_and_list_of_samples = concatenate_all_samples_in_track(track, bpm, folder)

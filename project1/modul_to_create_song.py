@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 from os import path
 from modul_to_create_tracks import create_all_track
-from beatbox import bpm
 
 def create_song(bpm, folder):
     dict_of_tracks = create_all_track(bpm, folder)
@@ -18,6 +17,7 @@ def create_song(bpm, folder):
         else:
             length_of_song += dict_of_tracks[j][2]
     song = np.zeros((length_of_song, 2))
+    #add next tracks in right place
     for i, j in enumerate(track_names):
         if i == 0:
             where_to_start = 0
@@ -30,5 +30,6 @@ def create_song(bpm, folder):
             true_length_of_track_new = dict_of_tracks[j][2]
             song[where_to_start:(where_to_start + true_length_of_track_new), :] += 0.5 * dict_of_tracks[j][0]
             where_to_start += raw_length_of_track_new
+    #return song as array
     song = np.array(song, dtype = 'int16')
     return song
