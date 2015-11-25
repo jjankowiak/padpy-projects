@@ -4,13 +4,19 @@ from os import path
 from modul_to_create_tracks import create_all_track
 
 def create_song(bpm, folder):
+    """
+    Function to create song from all tracks
+    """
+    #dictionary of all tracks
     dict_of_tracks = create_all_track(bpm, folder)
+    #reading song definition (the order of tracks)
     dir_to_song = path.join(folder, "song.txt")
     song = pd.read_csv(dir_to_song, header = None, dtype = str)
     # all tracks used in the song in the order
     track_names = 'track' + song.loc[:, 0] + '.txt'
     # the length of the song = sum of raw length of every track + eventually additional ending of the last track
     length_of_song = 0
+    #calculating the length of the song (=sum of length of all tracks)
     for i, j in enumerate(track_names):
         if i != len(track_names) - 1:
             length_of_song += dict_of_tracks[j][1]

@@ -3,6 +3,9 @@ from os import path
 import numpy as np
 
 def read_sample(column_of_track, length_of_column, folder, next_sample):
+	"""
+	Function creates array which represents one column in track file which consists of two signs.
+	"""
 	# check the number of sample (only one type in one column)
     num_of_sample = list(set(column_of_track).difference(['--']))[0]
     sample = wav.read(path.join(folder, 'sample' + num_of_sample + '.wav'))
@@ -21,6 +24,9 @@ def read_sample(column_of_track, length_of_column, folder, next_sample):
     return column
 
 def create_frequency(note_string):
+	"""
+	Function to create frequency which responses the note name.
+	"""
 	letter = note_string[0]
 	sharp = note_string[1]
 	number = int(note_string[2])
@@ -36,6 +42,9 @@ def create_frequency(note_string):
 	return f 
 
 def create_note(column_of_track, length_of_column, folder, next_sample):
+	"""
+	Function creates array which represents note (sound with given frequency)
+	"""
 	column = np.zeros((length_of_column, 2))
 	for i, j in enumerate(column_of_track):
 		if j != '---':
@@ -47,4 +56,6 @@ def create_note(column_of_track, length_of_column, folder, next_sample):
 			sample = np.transpose(np.vstack((y, y)))
 			column[i * next_sample : i * next_sample + next_sample, :] += sample
 	return column
+
+	
 

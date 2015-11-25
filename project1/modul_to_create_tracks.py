@@ -4,6 +4,10 @@ import modul_to_create_column as cc
 from os import path
 
 def concatenate_one_type_of_sample(column_of_track, length_of_column, folder, next_sample):
+    """
+    Function to create one column of the track (reading the sample or create notes).
+    It returns array which represents one column in the track file.
+    """
     column = np.zeros((length_of_column, 2)) 
     # check the length of the elements in column (assumption - all elements have the same length, so we check only first one)
     column_length = len(column_of_track[1])
@@ -15,6 +19,9 @@ def concatenate_one_type_of_sample(column_of_track, length_of_column, folder, ne
     return column
 
 def concatenate_all_samples_in_track(track, bpm, folder):
+    """
+    Function creates list of arrays which are returned by the function concatenate_one_type_of_sample.
+    """
     nrow_track = track.shape[0]
     ncol_track = track.shape[1]
     # bit per second
@@ -31,6 +38,9 @@ def concatenate_all_samples_in_track(track, bpm, folder):
     return [N, list_of_samples]
 
 def merge_all_concatenated_samples(list_of_samples):
+    """
+    Function merges all arrays returned in a list by funtion concatenate_all_samples_in_track.
+    """
     k = len(list_of_samples)
     # look for maximum number of rows in all samples
     num_of_rows = [None] * k
@@ -50,6 +60,11 @@ def merge_all_concatenated_samples(list_of_samples):
     return sample_all
 
 def create_track(track_name, bpm, folder):
+    """
+    Function creates array for track.
+    It return track_array and in addition raw number of rows (to know where we want to start add next track)
+    and true number of rows.
+    """
     path_to_track = path.join(folder, track_name)
     track = pd.read_csv(path_to_track, sep = ' ', header = None, dtype = str)
     raw_num_of_rows_and_list_of_samples = concatenate_all_samples_in_track(track, bpm, folder)
@@ -70,6 +85,9 @@ def take_track_names(folder):
     return name_of_track
 
 def create_all_track(bpm, folder):
+    """
+    Function returns dictionary of arrays which represents all tracks.
+    """
     name_of_track = take_track_names(folder)
     # unique tracks
     num_of_tracks = len(name_of_track)
