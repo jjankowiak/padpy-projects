@@ -31,8 +31,8 @@ def create_frequency(note_string):
 	f = f_basic * (S ** dict_of_sound[letter])
 	if sharp == '#':
 		f *= S
-		diff_number = number - 4
-		f *= 2 ** diff_number
+	diff_number = number - 4
+	f *= 2 ** diff_number
 	return f 
 
 def create_note(column_of_track, length_of_column, folder, next_sample):
