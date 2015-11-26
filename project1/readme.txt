@@ -21,3 +21,5 @@ Funkcje, które tworzą macierz dla trackXY.txt, tzn. najpierw tworzymy sobie po
 
 5. modul_to_create_song.py
 Mając już macierze odpowiadające trackom, łączymy je w piosenkę w odpowiedniej kolejności.
+
+Projekt = podstawa + czytanie z .zip + możliwość odgrywania nutek
